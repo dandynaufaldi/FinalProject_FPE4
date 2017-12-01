@@ -15,6 +15,7 @@ int main(int argc, char *argv[])
 		   	exit();
   		}
   		printf(1, "Opening %s\n", argv[i]);
+  		close(fd);
 	}
 	return 0;
 }
