@@ -16,6 +16,7 @@ Command wajib
 - [x] touch
 - [ ] cd
 - [ ] rm
+- [ ] rm -rf
 
 Command pilihan
 - [ ] tree
