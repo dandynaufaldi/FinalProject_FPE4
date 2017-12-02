@@ -15,7 +15,7 @@ Command wajib
 - [x] ls
 - [x] touch
 - [x] cd
-- [ ] rm
+- [x] rm
 - [ ] rm -rf
 
 Command pilihan
