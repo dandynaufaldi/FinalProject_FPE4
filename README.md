@@ -22,7 +22,7 @@ Command pilihan
 - [ ] tree
 - [ ] tree -d (hanya tampilkan direktori)
 - [ ] tree -o (simpan ke output file)
-- [ ] tree -p (tampilkan hak akses file, cancel aja ya :())
+- [ ] tree -p (tampilkan hak akses file, cancel aja ya :( )
 - [ ] tail
 - [ ] tail -c NUM (tampilkan NUM bytes terakhir)
 - [ ] tail -c +NUM (tampilkan mulai dari bytes ke-NUM)
