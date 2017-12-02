@@ -26,26 +26,58 @@ main(int argc, char *argv[])
     exit();
   }
   
-  char FPE4[1000];
-  strcpy(FPE4, argv[2]);
-  int lensrc = strlen(argv[1]);
-  int lendst = strlen(argv[2]);
-  if(argv[2][lendst-1]=='/'){ //copy ke directory
-    int i = lensrc-1;
-    while(i--){
-      if (argv[1][i]=='/') break;
+  int fd1 = open(argv[2], O_RDONLY);
+  //printf(1, "fd1 = %d\n", fd1);
+  if(fd1<0){
+    close(fd1);
+    fd1 = open(argv[2], O_RDWR|O_CREATE);
+    if (fd1<0){
+      printf(1, "cp: cannot open %s\n", argv[2]);
+      close(fd1);
+      exit();
     }
-    i++;
-    strcpy(&FPE4[lendst], &argv[1][i]);
   }
-  int fd1 = open(FPE4, O_CREATE|O_RDWR);
-  if (fd1<0) {
-    printf(1, "cp: cannot open %s\n", argv[2]);
+  struct stat st;
+  if(fstat(fd1, &st) < 0){
+    printf(2, "cp: cannot stat %s\n", argv[2]);
+    close(fd1);
     exit();
   }
+
+  switch(st.type){
+  case T_FILE:
+    //printf(1, "open file %s\n", argv[2]);
+    close(fd1);
+    fd1 = open(argv[2], O_RDWR);
+    
+    break;
+
+  case T_DIR:
+    //printf(1, "open directory %s\n", argv[2]);
+    close(fd1);
+    char FPE4[1000];
+    strcpy(FPE4, argv[2]);
+    strcat("/", FPE4);
+    int lensrc = strlen(argv[1]);
+    int lendst = strlen(FPE4);
+    if(FPE4[lendst-1]=='/'){ //copy ke directory
+      int i = lensrc-1;
+      while(i--){
+        if (argv[1][i]=='/') break;
+      }
+      i++;
+      strcpy(&FPE4[lendst], &argv[1][i]);
+    }
+    int fd1 = open(FPE4, O_CREATE|O_RDWR);
+    if (fd1<0) {
+      printf(1, "cp: cannot open %s\n", FPE4);
+      exit();
+    }
+    break;
+  }
   int n;
-  while((n=read(fd0, buf, sizeof(buf)))>0){
-    write(fd1, buf, n);
+    while((n=read(fd0, buf, sizeof(buf)))>0){
+      write(fd1, buf, n);
   }
   close(fd0);
   close(fd1);
