@@ -9,14 +9,14 @@ Kelompok: FPE4
 
 Command wajib
 - [x] cp
-- [ ] cp*
+- [x] cp*
 - [ ] cp -R
 - [ ] mv
+- [ ] mv *
 - [x] ls
 - [x] touch
 - [x] cd
 - [x] rm
-- [ ] rm -rf
 
 Command pilihan
 - [ ] tree

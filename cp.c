@@ -2,10 +2,27 @@
 #include "stat.h"
 #include "user.h"
 #include "fcntl.h"
+#include "fs.h"
+char* fmtname(char *path)
+{
+  static char buf[DIRSIZ+1];
+  char *p;
 
-char buf[512];
+  // Find first character after last slash.
+  for(p=path+strlen(path); p >= path && *p != '/'; p--)
+    ;
+  p++;
+
+  // Return blank-padded name.
+  if(strlen(p) >= DIRSIZ)
+    return p;
+  memmove(buf, p, strlen(p));
+  memset(buf+strlen(p), ' ', DIRSIZ-strlen(p));
+  return buf;
+}
 
 void cp_reg(char *arg1, char *arg2){
+  char buf[512];
   int fd0 = open(arg1, O_RDONLY);
   if (fd0<0) {
     printf(1, "cp: cannot open %s\n", arg1);
@@ -38,7 +55,7 @@ void cp_reg(char *arg1, char *arg2){
     close(fd1);
     char FPE4[1000];
     strcpy(FPE4, arg2);
-    strcat("/", FPE4);
+    if (FPE4[strlen(FPE4)-1] !='/') strcat("/", FPE4);
     int lensrc = strlen(arg2);
     int lendst = strlen(FPE4);
     if(FPE4[lendst-1]=='/'){ //copy ke directory
@@ -64,6 +81,50 @@ void cp_reg(char *arg1, char *arg2){
   close(fd1);
 }
 
+void cp_all(char *dest){
+  char buf[512];
+  int cur = open(".", O_RDONLY);
+  if (cur<0) {
+    printf(1, "cp: cannot open current dir\n");
+    exit();
+  }
+  char *tmp = (char*)malloc(sizeof(char)*1024);
+  strcpy(tmp, dest);
+  if (tmp[strlen(tmp)-1]=='/'){
+    tmp[strlen(tmp)-1] = 0;
+  }
+  int fdest = open(tmp, O_RDONLY);
+    if (fdest<0) {        //folder not exist
+    close(fdest);
+    mkdir(tmp);
+    fdest = open(tmp, O_RDONLY);
+  }
+  struct dirent de;
+  struct stat st;
+  char *p;
+
+  strcpy(buf, ".");
+  p = buf+strlen(buf);
+  *p++ = '/';
+  while(read(cur, &de, sizeof(de)) == sizeof(de)){
+    if(de.inum == 0)
+      continue;
+    memmove(p, de.name, DIRSIZ);
+    if(stat(buf, &st) < 0){
+      printf(1, "cp: cannot stat %s\n", buf);
+      continue;
+    }
+
+    if (st.type==T_DIR){
+      if (fmtname(buf)[0]=='.') continue;
+      printf(1, "cp : omitting %s\n", fmtname(buf));
+    }
+    else{
+      cp_reg(buf, tmp);
+    }
+  }
+}
+
 int
 main(int argc, char *argv[])
 {
@@ -72,7 +133,8 @@ main(int argc, char *argv[])
     exit();
   }
   if (argv[1][0]=='*'){
-    printf(1, "cp : cp * not yet implemented\n");
+    //printf(1, "cp : cp * not yet implemented\n");
+    cp_all(argv[2]);
     exit();
   }
   if (argv[1][0]=='-'){
