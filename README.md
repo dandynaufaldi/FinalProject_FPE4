@@ -10,7 +10,7 @@ Kelompok: FPE4
 Command wajib
 - [x] cp
 - [x] cp*
-- [ ] cp -R
+- [x] cp -R
 - [ ] mv
 - [ ] mv *
 - [x] ls
