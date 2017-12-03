@@ -11,7 +11,7 @@ Command wajib
 - [x] cp
 - [x] cp*
 - [x] cp -R
-- [ ] mv
+- [x] mv
 - [ ] mv *
 - [x] ls
 - [x] touch
