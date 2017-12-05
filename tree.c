@@ -29,7 +29,7 @@ fmtname(char *path)
 }
 
 void
-ls(char *path, int level)
+ls(char *path, int level, int mode)
 {
   char buf[512], *p;
   int fd;
@@ -49,20 +49,24 @@ ls(char *path, int level)
   //printf(1, "path = %s\n", path);
   switch(st.type){
   case T_FILE:
-    if(level == 0)
+    if(mode != 1)
     {
-	printf(1, "|--%s\n", fmtname(path));
+	    if(level == 0)
+	    {
+		printf(1, "|--%s\n", fmtname(path));
+	    }
+	    else
+	    {
+		int count=0;
+		printf(1, "|");
+		for(count=0;count<level;count++)
+		{
+		    printf(1, "  ");
+		}
+		printf(1, "|--%s\n", fmtname(path));
+	    }
     }
-    else
-    {
-	int count=0;
-	printf(1, "|");
-	for(count=0;count<level;count++)
-	{
-	    printf(1, "  ");
-	}
-	printf(1, "|--%s\n", fmtname(path));
-    }
+    
     break;
 
   case T_DIR:
@@ -102,9 +106,9 @@ ls(char *path, int level)
 	    }
 	    char *name = fmtname(buf);
 	    if(name[0] != '.')
-	    ls(buf, level+1);
+	    ls(buf, level+1, mode);
       }
-      else
+      else if(mode != 1)
       {
 	    if(level == 0)
 	    {
@@ -136,10 +140,66 @@ main(int argc, char *argv[])
   int i;
 
   if(argc < 2){
-    ls(".", 0);
+    ls(".", 0, 0);
     exit();
   }
-  for(i=1; i<argc; i++)
-    ls(argv[i], 0);
+	else
+	{
+		if(argv[1][0] == '-')
+		{
+			if(argv[1][1] == 'd')
+			{
+				if(argc == 2)
+				ls(".", 0, 1);
+				else
+				{
+					for(i=2;i<argc;i++)
+					{
+						ls(argv[i], 0, 1);
+					}
+				}
+			}
+			else if(argv[1][1] == 'o')
+			{
+				if(argc < 3)
+				{
+					printf(1, "error: usage tree -o <filename> <path>\n");
+				}
+				if(argc == 3)
+				ls(".", 0, 2);
+				else
+				{
+					for(i=3;i<argc;i++)
+					{
+						ls(argv[i], 0, 2);
+					}
+				}
+			}
+			else if(argv[1][1] == 'p')
+			{
+				if(argc == 2)
+				ls(".", 0, 3);
+				else
+				{
+					for(i=2;i<argc;i++)
+					{
+						ls(argv[i], 0, 3);
+					}
+				}
+			}
+			else
+			{
+				printf(1, "error: undefined mode\n");
+			}
+		}
+		else
+		{
+			int i;
+			for(i=1;i<argc;i++)
+			{
+				ls(argv[i], 0, 0);
+			}
+		}
+	}
   exit();
 }
