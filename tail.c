@@ -4,9 +4,9 @@
 #include "fcntl.h"
 #include "fs.h"
 
-int strint(char* a)
+long long int strint(char* a)
 {
-	int result=0;
+	long long int result=0;
 	int i=0;
 	for(i=0; a[i] != '\0'; i++)
 	{
@@ -15,12 +15,12 @@ int strint(char* a)
 	return result;
 }
 
-void tailbyte(char* path, int bytestoprint, int pflag)
+void tailbyte(char* path, long long int bytestoprint, int pflag)
 {
 	int fd;
 	char line[1];
 	int status;
-	int size=0;
+	long long int size=0;
 	fd = open(path, 0);
 	while((status = read(fd, line, sizeof(line))) > 0)
 	{
@@ -30,7 +30,7 @@ void tailbyte(char* path, int bytestoprint, int pflag)
 	{
 		printf(1, "Error read file\n");
 	}
-	int skip = size - bytestoprint;
+	long long int skip = size - bytestoprint;
 	if(skip < 0)
 	{
 		skip = 0;
@@ -54,12 +54,12 @@ void tailbyte(char* path, int bytestoprint, int pflag)
 	close(fd);
 }
 
-void tailline(char* path, int linestoprint, int pflag)
+void tailline(char* path, long long int linestoprint, int pflag)
 {
 	int fd;
 	char line[1];
 	int status;
-	int totline=0;
+	long long int totline=0;
 	fd = open(path, 0);
 	while((status = read(fd, line, sizeof(line))) > 0)
 	{
@@ -70,7 +70,7 @@ void tailline(char* path, int linestoprint, int pflag)
 	{
 		printf(1, "Error read file\n");
 	}
-	int skip = totline - linestoprint;
+	long long int skip = totline - linestoprint;
 	if(skip < 0)
 	{
 		skip = 0;
@@ -100,7 +100,7 @@ void tailline(char* path, int linestoprint, int pflag)
 
 int main(int argc, char* argv[])
 {
-	int a;
+	long long int a;
 	int fd = -1;
 	if(argc <=1)
 	printf(1, "Usage: tail <mode> <filename>");
@@ -185,6 +185,10 @@ int main(int argc, char* argv[])
 					}
 				}
 				
+			}
+			else
+			{
+				printf(1, "error: mode undefined\n");
 			}
 		}
 		else
