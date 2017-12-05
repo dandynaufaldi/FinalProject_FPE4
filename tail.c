@@ -94,9 +94,37 @@ int main(int argc, char* argv[])
 			}
 			else if(argv[1][1] == 'q')
 			{
+				int i;
+				for(i=2;i<argc;i++)
+				{
+					fd = open(argv[i], 0);
+					if(fd < 0)
+					printf(1, "Error: cannot open %s\n", argv[i]);
+					else
+					{
+						close(fd);
+						tailline(argv[i], 10);
+						printf(1, "\n");
+					}
+				}
 			}
 			else if(argv[1][1] == 'v')
 			{
+				int i;
+				for(i=2;i<argc;i++)
+				{
+					fd = open(argv[i], 0);
+					if(fd < 0)
+					printf(1, "Error: cannot open %s\n", argv[i]);
+					else
+					{
+						close(fd);
+						printf(1, "==> %s <==\n", argv[i]);
+						tailline(argv[i], 10);
+						printf(1, "\n");
+					}
+				}
+				
 			}
 		}
 		else
@@ -110,6 +138,7 @@ int main(int argc, char* argv[])
 				else
 				{
 					close(fd);
+					printf(1, "==> %s <==\n", argv[i]);
 					tailline(argv[i], 10);
 					printf(1, "\n");
 				}
