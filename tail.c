@@ -3,18 +3,6 @@
 #include "user.h"
 #include "fcntl.h"
 #include "fs.h"
-
-long long int strint(char* a)
-{
-	long long int result=0;
-	int i=0;
-	for(i=0; a[i] != '\0'; i++)
-	{
-		result = result*10 + a[i] - '0';
-	}
-	return result;
-}
-
 void tailbyte(char* path, long long int bytestoprint, int pflag)
 {
 	int fd;
@@ -31,6 +19,13 @@ void tailbyte(char* path, long long int bytestoprint, int pflag)
 		printf(1, "Error read file\n");
 	}
 	long long int skip = size - bytestoprint;
+	if(pflag == 3)
+	{
+		if(bytestoprint > size)
+		skip = size;
+		else
+		skip = bytestoprint-1;
+	}
 	if(skip < 0)
 	{
 		skip = 0;
@@ -41,7 +36,7 @@ void tailbyte(char* path, long long int bytestoprint, int pflag)
 	}
 	close(fd);
 	fd = open(path, 0);
-	while(skip)
+	while(skip>0)
 	{
 		status = read(fd, line, sizeof(line));
 		skip--;
@@ -71,6 +66,13 @@ void tailline(char* path, long long int linestoprint, int pflag)
 		printf(1, "Error read file\n");
 	}
 	long long int skip = totline - linestoprint;
+	if(pflag == 3)
+	{
+		if(linestoprint > totline)
+		skip = totline;
+		else
+		skip = linestoprint - 1;
+	}
 	if(skip < 0)
 	{
 		skip = 0;
@@ -81,7 +83,7 @@ void tailline(char* path, long long int linestoprint, int pflag)
 	}
 	close(fd);
 	fd = open(path, 0);
-	while(skip)
+	while(skip>0)
 	{
 		status = read(fd, line, sizeof(line));
 		if(line[0] == '\n')
@@ -112,21 +114,54 @@ int main(int argc, char* argv[])
 			{
 				if(argc < 4)
 				{
-					printf(1, "Error: Usage tail -n <NUM> <filename>\n");
+					printf(1, "Error: Usage tail -n (+)<NUM> <filename>\n");
 				}
 				else
 				{
 					int i;
-					a=strint(argv[2]);
-					for(i=3;i<argc;i++)
+					if(argv[2][0] == '+')
 					{
-						fd = open(argv[i], 0);
-						if(fd < 0)
-						printf(1, "Error: cannot open %s\n", argv[i]);
+						char* b = argv[2]+1;
+						a=atoi(b);
+						if(a==0)
+						{
+							printf(1, "Error: Usage tail -n <NUM> <filename>\n");
+						}
 						else
 						{
-							close(fd);
-							tailline(argv[i], a, 1);
+							for(i=3;i<argc;i++)
+							{
+								fd = open(argv[i], 0);
+								if(fd < 0)
+								printf(1, "Error: cannot open %s\n", argv[i]);
+								else
+								{
+									close(fd);
+									tailline(argv[i], a, 3);
+								}
+							}
+						}
+					}
+					else
+					{
+						a=atoi(argv[2]);
+						if(a==0)
+						{
+							printf(1, "Error: Usage tail -n <NUM> <filename>\n");
+						}
+						else
+						{
+							for(i=3;i<argc;i++)
+							{
+								fd = open(argv[i], 0);
+								if(fd < 0)
+								printf(1, "Error: cannot open %s\n", argv[i]);
+								else
+								{
+									close(fd);
+									tailline(argv[i], a, 1);
+								}
+							}
 						}
 					}
 				}
@@ -135,21 +170,54 @@ int main(int argc, char* argv[])
 			{
 				if(argc < 4)
 				{
-					printf(1, "Error: Usage tail -c <NUM> <filename>\n");
+					printf(1, "Error: Usage tail -c (+)<NUM> <filename>\n");
 				}
 				else
 				{
 					int i;
-					a=strint(argv[2]);
-					for(i=3;i<argc;i++)
+					if(argv[2][0] == '+')
 					{
-						fd = open(argv[i], 0);
-						if(fd < 0)
-						printf(1, "Error: cannot open %s\n", argv[i]);
+						char* b = argv[2]+1;
+						a=atoi(b);
+						if(a==0)
+						{
+							printf(1, "Error: Usage tail -c +<NUM> <filename>\n");	
+						}
 						else
 						{
-							close(fd);
-							tailbyte(argv[i], a, 1);
+							for(i=3;i<argc;i++)
+							{
+								fd = open(argv[i], 0);
+								if(fd < 0)
+								printf(1, "Error: cannot open %s\n", argv[i]);
+								else
+								{
+									close(fd);
+									tailbyte(argv[i], a, 3);
+								}
+							}
+						}
+					}
+					else
+					{
+						a=atoi(argv[2]);
+						if(a==0)
+						{
+							printf(1, "Error: Usage tail -c <NUM> <filename>\n");	
+						}
+						else
+						{
+							for(i=3;i<argc;i++)
+							{
+								fd = open(argv[i], 0);
+								if(fd < 0)
+								printf(1, "Error: cannot open %s\n", argv[i]);
+								else
+								{
+									close(fd);
+									tailbyte(argv[i], a, 1);
+								}
+							}
 						}
 					}
 				}
