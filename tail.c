@@ -16,7 +16,8 @@ void tailbyte(char* path, long long int bytestoprint, int pflag)
 	}
 	if(status<0)
 	{
-		printf(1, "Error read file\n");
+		printf(1, "Error read %s\n", path);
+		return;
 	}
 	long long int skip = size - bytestoprint;
 	if(pflag == 3)
@@ -63,7 +64,8 @@ void tailline(char* path, long long int linestoprint, int pflag)
 	}
 	if(status<0)
 	{
-		printf(1, "Error read file\n");
+		printf(1, "Error read %s\n", path);
+		return;
 	}
 	long long int skip = totline - linestoprint;
 	if(pflag == 3)
