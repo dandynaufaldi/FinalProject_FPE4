@@ -103,6 +103,7 @@ lsfile(char *path, int level, int fd1)
       }
       if (st.type==T_DIR)
       {
+      	if (fmtname(buf)[0]=='.' && strlen(buf)>2) continue;
 	    char *name = fmtname(buf);
 	    if(level == 0)
 	    {
@@ -227,6 +228,7 @@ ls(char *path, int level, int mode)
       }
       if (st.type==T_DIR)
       {
+      	if (fmtname(buf)[0]=='.' && strlen(buf)>2) continue;
 	    if(level == 0)
 	    {
 		printf(1, "|--");
@@ -252,7 +254,7 @@ ls(char *path, int level, int mode)
 	    if(level == 0)
 	    {
 		printf(1, "|--");
-		printf(1, "%s%s\n",NORMAL_COLOR, fmtname(buf));
+		printf(1, "%s\n", fmtname(buf));
 	    }
 	    else
 	    {
@@ -263,7 +265,7 @@ ls(char *path, int level, int mode)
 		    printf(1, "  ");
 		}
 		printf(1, "|--");
-		printf(1, "%s%s\n",NORMAL_COLOR, fmtname(buf));
+		printf(1, "%s\n", fmtname(buf));
 	    }
 	    
       }
@@ -280,6 +282,7 @@ main(int argc, char *argv[])
   int fd=-1;
 
   if(argc < 2){
+  	printf(1,".\n");
     ls(".", 0, 0);
     exit();
   }
@@ -289,12 +292,15 @@ main(int argc, char *argv[])
 		{
 			if(argv[1][1] == 'd')
 			{
-				if(argc == 2)
-				ls(".", 0, 1);
+				if(argc == 2){
+					printf(1,".\n");
+					ls(".", 0, 1);
+				}
 				else
 				{
 					for(i=2;i<argc;i++)
 					{
+						printf(1,"%s\n", argv[i]);
 						ls(argv[i], 0, 1);
 					}
 				}
@@ -310,12 +316,17 @@ main(int argc, char *argv[])
 				printf(1, "Error: cannot open %s\n", argv[2]);
 				else
 				{
-					if(argc == 3)
-					lsfile(".", 0, fd);
+					if(argc == 3){
+						write(fd, ".\n", 2);
+						lsfile(".", 0, fd);
+					}
+					
 					else
 					{
 						for(i=3;i<argc;i++)
-						{
+						{	
+							write(fd, argv[i], sizeof(argv[i]));
+							write(fd, "\n", 1);
 							lsfile(argv[i], 0, fd);
 						}
 					}
@@ -332,6 +343,7 @@ main(int argc, char *argv[])
 			int i;
 			for(i=1;i<argc;i++)
 			{
+				printf(1, "%s\n", argv[i]);
 				ls(argv[i], 0, 0);
 			}
 		}

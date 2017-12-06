@@ -19,9 +19,9 @@ Command wajib
 - [x] rm
 
 Command pilihan
-- [ ] tree
-- [ ] tree -d (hanya tampilkan direktori)
-- [ ] tree -o (simpan ke output file)
+- [x] tree
+- [x] tree -d (hanya tampilkan direktori)
+- [x] tree -o (simpan ke output file)
 - [ ] tree -p (tampilkan hak akses file, cancel aja ya :( )
 - [x] tail
 - [x] tail -c NUM (tampilkan NUM bytes terakhir)
