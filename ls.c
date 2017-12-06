@@ -3,12 +3,9 @@
 #include "user.h"
 #include "fs.h"
 #include "fcntl.h"
-
-//color https://stackoverflow.com/revisions/41520005/2
 #define NORMAL_COLOR  "\x1B[0m"
 #define GREEN  "\x1B[32m"
 #define BLUE  "\x1B[34m"
-
 char*
 fmtname(char *path)
 {
@@ -49,7 +46,7 @@ ls(char *path)
   //printf(1, "path = %s\n", path);
   switch(st.type){
   case T_FILE:
-    printf(1, "%s\n", fmtname(path));
+    printf(1, "%s %d %d %d\n", fmtname(path), st.type, st.ino, st.size);
     break;
 
   case T_DIR:
@@ -69,9 +66,13 @@ ls(char *path)
         printf(1, "ls: cannot stat %s\n", buf);
         continue;
       }
-      if (st.type==T_DIR)
-        printf(1, "%s%s\n",BLUE, fmtname(buf));
-      else printf(1, "%s%s\n",NORMAL_COLOR, fmtname(buf));
+      //printf(1, "buf=%s\n", buf);
+      if (st.type==T_DIR){
+        if (fmtname(buf)[0]=='.') continue;
+        printf(1, "%s%s %d %d %d\n", BLUE,fmtname(buf), st.type, st.ino, st.size);
+        printf(1, "%s", NORMAL_COLOR);
+      }
+      else printf(1, "%s%s %d %d %d\n", NORMAL_COLOR,fmtname(buf), st.type, st.ino, st.size);
     }
     break;
   }

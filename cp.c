@@ -38,7 +38,7 @@ char* fmtname(char *path)
 }
 
 void cp_reg(char *arg1, char *arg2){
-  printf(1, "cp: from %s to %s \n", arg1, arg2);
+  //printf(1, "cp: from %s to %s \n", arg1, arg2);
   char buf[512];
   int fd0 = open(arg1, O_RDONLY);
   if (fd0<0) {
@@ -155,7 +155,7 @@ void cp_all(char *dest){
 }
 
 void cp_r(char *src, char *dest){
-  printf(1, "cp: from %s to %s \n", src, dest);
+  //printf(1, "cp: from %s to %s \n", src, dest);
   char buf[512];
   struct stat sts, std;
   if (stat(src, &sts)>=0 && stat(dest, &std)>=0 && sts.ino == std.ino){
@@ -201,7 +201,7 @@ void cp_r(char *src, char *dest){
       strcat("/", tempdest);
       strcat(fmtname(buf), tempdest);
       mkdir(tempdest);
-      printf(1, "cp: create dir %s\n", tempdest);
+      //printf(1, "cp: create dir %s\n", tempdest);
       cp_r(tempsrc, tempdest);
     }
     else{
