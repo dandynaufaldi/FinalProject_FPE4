@@ -14,8 +14,8 @@ int main(int argc, char *argv[])
 		    printf(2, "cannot touch %s\n", argv[i]);
 		   	exit();
   		}
-  		printf(1, "Opening %s\n", argv[i]);
+  //		printf(1, "Opening %s\n", argv[i]);
   		close(fd);
 	}
-	return 0;
+	exit();
 }
