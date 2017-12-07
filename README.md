@@ -30,6 +30,6 @@ Command pilihan
 - [x] tail -n +NUM (tampilkan mulai dari line ke-NUM)
 - [x] tail -v tampilkan header nama file
 - [x] tail -q tidak menampilkan header nama file
-- [ ] sort
-- [ ] sort -r (sort descending / besar-kecil)
-- [ ] sort -o (simpan ke file output)
+- [x] sort
+- [x] sort -r (sort descending / besar-kecil)
+- [x] sort -o (simpan ke file output)
