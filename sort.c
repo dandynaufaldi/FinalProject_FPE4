@@ -3,6 +3,45 @@
 #include "user.h"
 #include "fcntl.h"
 #include "fs.h"
+int compare(char* first, char* second)
+{
+	char fstr[256];
+	char sstr[256];
+	int fskip=0;
+	int sskip=0;
+	strcpy(fstr, first);
+	strcpy(sstr, second);
+	int a = strlen(fstr);
+	int b = strlen(sstr);
+	int i=0;
+	int flag=0;
+	for(i=0;i<a;i++)
+	{
+		if(!(fstr[i] < 48 || (fstr[i] >57 && fstr[i] < 65) || (fstr[i]>90 && fstr[i]<97) || (fstr[i] > 122)) && flag==0)
+		{
+			flag = 1;
+			fskip = i;
+		}
+		if(fstr[i] >= 'a' && fstr[i] <= 'z')
+		{
+			fstr[i] = fstr[i] - 32;
+		}
+	}
+	flag = 0;
+	for(i=0;i<b;i++)
+	{
+		if(!(sstr[i] < 48 || (sstr[i] >57 && sstr[i] < 65) || (sstr[i]>90 && sstr[i]<97) || (sstr[i] > 122)) && flag==0)
+		{
+			flag = 1;
+			sskip = i;
+		}
+		if(sstr[i] >= 'a' && sstr[i] <= 'z')
+		{
+			sstr[i] = sstr[i] - 32;
+		}
+	}
+	return strcmp(fstr+fskip, sstr+sskip);
+}
 void sort(char* path, int mode, char* dest)
 {
 	int fd;
@@ -59,7 +98,7 @@ void sort(char* path, int mode, char* dest)
 		printf(1, "Error: cannot read %s\n", path);
 		return;
 	}
-	printf(1, "Done Taking\n");
+//	printf(1, "Done Taking\n");
 	char temp[256];
 	for(i=0;i<totline-1;i++)
 	{
@@ -67,7 +106,7 @@ void sort(char* path, int mode, char* dest)
 		{
 	//		printf(1, "j=%d j+1=%d\n",j, j+1);
 			int k=j+1;
-			if(strcmp(arr[j],arr[k]) > 0)
+			if(compare(arr[j],arr[k]) > 0)
 			{
 	//			printf(1, "swap\n");
 				strcpy(temp, arr[j]);
@@ -76,10 +115,10 @@ void sort(char* path, int mode, char* dest)
 			}
 		}
 	}
-	printf(1, "Done sorting\n");
+//	printf(1, "Done sorting\n");
 	if(mode == 0)
 	{
-		printf(1, "printing\n");
+//		printf(1, "printing\n");
 		for(i=totline;i>0;i--)
 		{
 			printf(1, "%s", arr[i-1]);
@@ -87,7 +126,7 @@ void sort(char* path, int mode, char* dest)
 	}
 	else if(mode == 1)
 	{
-		printf(1, "printing\n");
+//		printf(1, "printing\n");
 		for(i=0;i<totline;i++)
 		{
 			printf(1, "%s", arr[i]);
@@ -95,7 +134,7 @@ void sort(char* path, int mode, char* dest)
 	}
 	else if(mode == 2)
 	{
-		printf(1, "printing\n");
+//		printf(1, "printing\n");
 		int fd2=-1;
 		fd2 = open(dest, O_CREATE | O_WRONLY);
 		if(fd2 < 0)
