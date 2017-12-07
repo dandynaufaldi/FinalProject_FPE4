@@ -1,13 +1,5 @@
 # FinalProject_FPE4
 Final Project Sistem Operasi Semester Ganjil 2017
-
-
-███████╗██████╗ ███████╗██╗  ██╗
-██╔════╝██╔══██╗██╔════╝██║  ██║
-█████╗  ██████╔╝█████╗  ███████║
-██╔══╝  ██╔═══╝ ██╔══╝  ╚════██║
-██║     ██║     ███████╗     ██║
-╚═╝     ╚═╝     ╚══════╝     ╚═╝
                                 
 Kelompok: FPE4
 - 5115100028 		–	Bagus Dharma Iswara
