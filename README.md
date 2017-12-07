@@ -1,11 +1,19 @@
 # FinalProject_FPE4
 Final Project Sistem Operasi Semester Ganjil 2017
 
+
+███████╗██████╗ ███████╗██╗  ██╗
+██╔════╝██╔══██╗██╔════╝██║  ██║
+█████╗  ██████╔╝█████╗  ███████║
+██╔══╝  ██╔═══╝ ██╔══╝  ╚════██║
+██║     ██║     ███████╗     ██║
+╚═╝     ╚═╝     ╚══════╝     ╚═╝
+                                
 Kelompok: FPE4
-5115100028 		–	Bagus Dharma Iswara
-5116100011		–	Dandy Naufaldi
-5116100101		–	Bayu Satria Takariputra
-5116100124		–	Dhafa Hikmawan
+- 5115100028 		–	Bagus Dharma Iswara
+- 5116100011		–	Dandy Naufaldi
+- 5116100101		–	Bayu Satria Takariputra
+- 5116100124		–	Dhafa Hikmawan
 
 Command wajib
 - [x] cp
